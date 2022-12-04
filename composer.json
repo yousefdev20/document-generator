@@ -1,0 +1,22 @@
+{
+    "name": "yousef/document-generator",
+    "description": "Document-Generator Write (ODS, Xlsx, CSV) in PHP super fast and lightweight package",
+    "type": "library",
+    "require": {
+        "box/spout": "^3.3",
+        "illuminate/database": "^9.42"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Yousef\\GenerateDoc\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Yousef",
+            "email": "yousef.dev20@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
