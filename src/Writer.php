@@ -5,8 +5,8 @@ namespace Yousef\GenerateDoc;
 use Box\Spout\Common\Entity\Row;
 use Box\Spout\Common\Exception\UnsupportedTypeException;
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
-use Box\Spout\Writer\WriterAbstract;
 use Yousef\GenerateDoc\Concerns\FromQuery;
+use Yousef\GenerateDoc\Concerns\WithHeadings;
 use Yousef\GenerateDoc\Files\TemporaryFile;
 
 class Writer
@@ -39,16 +39,19 @@ class Writer
     /**
      * @param $export
      * @param string $writerType
-     * @return TemporaryFile
      * @throws UnsupportedTypeException
      */
-    public function export($export, string $fileName, string $writerType): static
+    public function export($export, string $fileName, string $writerType)
     {
         $this->exportable = $export;
 
-        $this->sheet = WriterEntityFactory::createWriter($fileName);
+        $this->sheet = WriterEntityFactory::createWriter($writerType);
 
         $this->open($fileName);
+
+        if ($export instanceof WithHeadings) {
+            $this->specialRaise();
+        }
 
         if ($export instanceof FromQuery) {
             $export->query()->chunk($this->config['chunk_size'], function($rows) {
@@ -63,7 +66,7 @@ class Writer
      * @param string $filePath
      * @return $this
      */
-    public function open(string $filePath): static
+    public function open(string $filePath)
     {
         $this->sheet->openToFile($filePath);
         return $this;
@@ -83,7 +86,7 @@ class Writer
      */
     public function download(): void
     {
-        $this->sheet->openToBrowser();
+        $this->sheet->openToBrowser($this->temporaryFile->getLocalPath());
     }
 
     public function __destruct()

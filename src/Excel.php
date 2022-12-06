@@ -9,15 +9,15 @@ use Yousef\GenerateDoc\Files\TemporaryFile;
 
 class Excel
 {
-    const XLSX     = 'Xlsx';
+    const XLSX     = 'xlsx';
 
-    const CSV      = 'Csv';
+    const CSV      = 'csv';
 
-    const TSV      = 'Csv';
+    const TSV      = 'csv';
 
-    const ODS      = 'Ods';
+    const ODS      = 'ods';
 
-    const XLS      = 'Xls';
+    const XLS      = 'xls';
 
     protected static Writer $writer;
     protected static array $config = [];
@@ -34,7 +34,7 @@ class Excel
     {
         $writerType = FileTypeDetector::detectStrict($fileName, $writerType);
 
-        self::$writer = new Writer(new LocalTemporaryFile(self::$config['filePath']), self::$config);
+        self::$writer = new Writer(new LocalTemporaryFile($fileName), self::$config);
         return self::$writer->export($export, $fileName, $writerType);
     }
 
