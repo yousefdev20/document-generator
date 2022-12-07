@@ -34,7 +34,7 @@ class Excel
     {
         $writerType = FileTypeDetector::detectStrict($fileName, $writerType);
 
-        self::$writer = new Writer(new LocalTemporaryFile($fileName), self::$config);
+        self::$writer = new Writer(null, self::$config);
         return self::$writer->export($export, $fileName, $writerType);
     }
 

@@ -21,16 +21,22 @@ class Writer
     protected $exportable;
 
     /**
+     * @var string
+     */
+    protected string $fileName;
+
+    /**
      * @var temporaryFile
      */
-    protected TemporaryFile $temporaryFile;
+    protected ?TemporaryFile $temporaryFile;
 
     protected array $config = [];
 
     /**
-     * @param  TemporaryFile  $temporaryFile
+     * @param TemporaryFile|null $temporaryFile
+     * @param array $config
      */
-    public function __construct(TemporaryFile $temporaryFile, array $config = [])
+    public function __construct(?TemporaryFile $temporaryFile, array $config = [])
     {
         $this->temporaryFile = $temporaryFile;
         $this->config = $config;
@@ -44,6 +50,8 @@ class Writer
     public function export($export, string $fileName, string $writerType)
     {
         $this->exportable = $export;
+
+        $this->fileName = $fileName;
 
         $this->sheet = WriterEntityFactory::createWriter($writerType);
 
@@ -82,11 +90,12 @@ class Writer
     }
 
     /**
-     * @return void
+     * @return mixed
      */
-    public function download(): void
+    public function download()
     {
-        $this->sheet->openToBrowser($this->temporaryFile->getLocalPath());
+        setcookie('progress', 'downloaded', time() + 60);
+        return $this->sheet->openToBrowser($this->fileName);
     }
 
     public function __destruct()
